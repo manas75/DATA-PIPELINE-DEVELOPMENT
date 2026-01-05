@@ -1,0 +1,40 @@
+import os
+
+def run_pipeline():
+   
+  
+    os.makedirs("data", exist_ok=True)
+
+    input_path = "data/raw_data.csv"
+    output_path = "data/processed_data.csv"
+
+  
+    if not os.path.exists(input_path):
+        print("Raw data not found. Creating sample dataset...")
+
+        sample_data = pd.DataFrame({
+            "Age": [25, 30, 28, 35],
+            "Salary": [50000, 60000, None, 80000],
+            "Department": ["IT", "HR", "IT", "Finance"],
+            "Gender": ["Male", "Female", "Female", "Male"]
+        })
+
+        sample_data.to_csv(input_path, index=False)
+
+    print("Starting ETL Pipeline...")
+
+ 
+    df = extract_data(input_path)
+    print("Data Extracted Successfully")
+ 
+    preprocessor = build_preprocessing_pipeline(df)
+    print("Preprocessing Pipeline Built")
+
+   
+    transformed_data = transform_data(df, preprocessor)
+    print("Data Transformed Successfully")
+ 
+    load_data(transformed_data, output_path)
+    print("Processed Data Saved Successfully")
+
+    print("ETL Pipeline Completed Successfully!")
